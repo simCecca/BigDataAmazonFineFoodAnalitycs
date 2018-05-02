@@ -1,10 +1,10 @@
-package bigdata.project1;
+package bigdata.project1.Job1;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class AmazonAnalisysJobOne 
 {
     public static void main( String[] args )
     {
