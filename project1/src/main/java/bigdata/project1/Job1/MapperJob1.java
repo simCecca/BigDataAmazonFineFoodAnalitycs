@@ -2,6 +2,7 @@ package bigdata.project1.Job1;
 
 import java.io.IOException;
 
+
 import java.util.Calendar;
 
 import org.apache.hadoop.io.IntWritable;
@@ -45,7 +46,7 @@ public class MapperJob1 extends Mapper<LongWritable, Text, IntWritable, Text> {
 			}
 
 			for(String current : splitReview)
-				context.write(new IntWritable(year), new Text(current));
+				context.write(new IntWritable(year), new Text(current.trim()));
 
 		} catch (Exception e) {
 			System.err.println("Invalid Date / Line" + e.getMessage());
