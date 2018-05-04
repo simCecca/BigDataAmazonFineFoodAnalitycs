@@ -9,5 +9,9 @@ public interface Constants {
 	public static final int DATE = 7;
 	
 	public static final int NUM_OF_FIELDS = 10;
+	
+	public static final int SCORE = 6;
+	
+	public static final int PRODUCT_ID = 1;
 
 }
