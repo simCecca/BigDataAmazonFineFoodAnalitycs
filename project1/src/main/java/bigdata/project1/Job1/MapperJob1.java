@@ -1,9 +1,10 @@
 package bigdata.project1.Job1;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 
+import java.util.Calendar;
+
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -12,34 +13,40 @@ import com.opencsv.CSVParser;
 
 
 
-public class MapperJob1 extends Mapper<LongWritable, Text, Text, Text> {
+public class MapperJob1 extends Mapper<LongWritable, Text, IntWritable, Text> {
 	
-	private String regex = "[_|$#<>\\^=\\[\\]\\*/\\\\,;,.\\-:()?!\"']";
+	private static final String SEPARATORS = "[_|$#<>\\^=\\[\\]\\*/\\\\,;,.\\-:()?!\"']";
 
 	@Override
-	protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, Text>.Context context)
+	protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, IntWritable, Text>.Context context)
 			throws IOException, InterruptedException {
 		
 		String line = value.toString();
 		
 		String[] values = new CSVParser().parseLine(line);
 		
-		if(values.length != 10) 
+		if(values.length != Constants.NUM_OF_FIELDS) 
 		{
 			System.err.println("invalid line");
 			return;
 		}
 		
-		String currentReview = values[8].toLowerCase().replaceAll(regex, " ");
+		String currentReview = values[Constants.SUMMARY].toLowerCase().replaceAll(SEPARATORS, " ");
 		
 		String[] splitReview = currentReview.split(" +");
-		Date data = new Date(Long.parseLong(values[7]));
+		
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(data);
+		calendar.setTimeInMillis(Long.parseLong(values[Constants.DATE]) * 1000);
 		int year = calendar.get(Calendar.YEAR);
 		
-		for(String current :  splitReview)
-			context.write(new Text(year+""), new Text(current));
+		if(year < Constants.MIN_DATE) 
+		{
+			System.err.println("Invalid Date");
+			return;
+		}
+		
+		for(String current : splitReview)
+			context.write(new IntWritable(year), new Text(current));
 			
 	}
 	
