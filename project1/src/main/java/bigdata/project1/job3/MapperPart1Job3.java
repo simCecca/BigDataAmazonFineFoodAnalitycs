@@ -33,7 +33,7 @@ public class MapperPart1Job3 extends Mapper<LongWritable, Text, Text, Text> {
 			context.write(new Text(user), new Text(prodotto));
 
 		} catch (Exception e) {
-			System.err.println("Invalid Line " + e.getMessage());
+			System.err.println("\t\t\t\t\t\t\t\t\t Invalid Line " + e.getMessage());
 		}
 		
 		
