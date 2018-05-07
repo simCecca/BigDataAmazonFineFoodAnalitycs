@@ -1,4 +1,4 @@
-package bigdata.project1.job2;
+package bigdata.project1.job3;
 
 import java.io.IOException;
 
@@ -10,16 +10,25 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import bigdata.project1.job2.AnalisysJob2;
+import bigdata.project1.job2.Avarage;
+import bigdata.project1.job2.CombinerJob2;
+import bigdata.project1.job2.MapperJob2;
+import bigdata.project1.job2.MapperPart2;
+import bigdata.project1.job2.ReducerJob2;
+import bigdata.project1.job2.ReducerPart2;
+import bigdata.project1.job2.YearProductWritable;
 
-public class AnalisysJob2 {
+public class AnalisysJob3 {
+	
 	public static void main( String[] args ) throws IOException, ClassNotFoundException, InterruptedException
 	{
 		Job job = new Job(new Configuration(), "AmazonJob2");
 
-		job.setJarByClass(AnalisysJob2.class);
-		job.setMapperClass(MapperJob2.class);
-		job.setCombinerClass(CombinerJob2.class);
-		job.setReducerClass(ReducerJob2.class);
+		job.setJarByClass(AnalisysJob3.class);
+		job.setMapperClass(MapperJob3.class);
+		job.setCombinerClass(CombinerJob3.class);
+		job.setReducerClass(ReducerJob3.class);
 
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
@@ -50,4 +59,5 @@ public class AnalisysJob2 {
 		job2.waitForCompletion(true);
 
 	}
+
 }

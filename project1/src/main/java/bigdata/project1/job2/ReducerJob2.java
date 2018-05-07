@@ -2,32 +2,34 @@ package bigdata.project1.job2;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 
-public class ReducerJob2 extends Reducer<YearProductWritable, IntWritable, YearProductWritable, DoubleWritable>  {
-
+public class ReducerJob2 extends Reducer<YearProductWritable, Avarage, YearProductWritable, DoubleWritable>  {
+	
+	private int totalWeigth = 0;
+	
+	private double count(Avarage avg) {
+		this.totalWeigth += avg.getCount().get();
+		return avg.getValue().get() * avg.getCount().get();
+	}
+	
 	@Override
-	protected void reduce(YearProductWritable key, Iterable<IntWritable> values,
-			Reducer<YearProductWritable, IntWritable, YearProductWritable, DoubleWritable>.Context ctx)
+	protected void reduce(YearProductWritable key, Iterable<Avarage> values,
+			Reducer<YearProductWritable, Avarage, YearProductWritable, DoubleWritable>.Context ctx)
 			throws IOException, InterruptedException {
-		if (key.getProduct().toString().equals("B009QEBGIQ")) {
-			int i = 0;
-			for (IntWritable _ : values) i++;
-			
-			System.out.println("\t\t\t\t\t\t\t\t >>>>>" + i);
-		}
 		
-		double avg = StreamSupport.stream(values.spliterator(), false)
-									.mapToInt(IntWritable::get).average().getAsDouble();
+		this.totalWeigth = 0;
 		
-		ctx.write(key, new DoubleWritable(avg));
+		double totAvg = StreamSupport.stream(values.spliterator(), false)
+									.mapToDouble(this::count).sum();
+		
+
+		
+		ctx.write(key, new DoubleWritable(totAvg/totalWeigth));
 	}
 
 

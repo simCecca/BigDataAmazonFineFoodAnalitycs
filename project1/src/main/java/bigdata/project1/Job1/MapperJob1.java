@@ -40,7 +40,7 @@ public class MapperJob1 extends Mapper<LongWritable, Text, IntWritable, Text> {
 			calendar.setTimeInMillis(Long.parseLong(values[Constants.DATE]) * 1000);
 			int year = calendar.get(Calendar.YEAR);
 
-			if(year < Constants.MIN_DATE) {
+			if(year < Constants.MIN_DATE_JOB1) {
 				System.err.println("Invalid Date");
 				return;
 			}

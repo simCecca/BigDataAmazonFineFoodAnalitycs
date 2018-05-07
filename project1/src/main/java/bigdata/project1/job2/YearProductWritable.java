@@ -42,7 +42,7 @@ public class YearProductWritable implements WritableComparable<YearProductWritab
 
 	@Override
     public String toString() {
-        return year.toString() + " -- " + product.toString();
+        return year.toString() + "\t" + product.toString();
     }
 
     @Override
@@ -61,11 +61,11 @@ public class YearProductWritable implements WritableComparable<YearProductWritab
     }
 
     public int compareTo(YearProductWritable tp) {
-        int cmp = year.compareTo(tp.year);
+        int cmp = product.compareTo(tp.product);
         if (cmp != 0) {
             return cmp;
         }
-        return product.compareTo(tp.product);
+        return year.compareTo(tp.year);
     }
 
 }
