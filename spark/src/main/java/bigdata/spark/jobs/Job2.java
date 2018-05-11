@@ -1,7 +1,6 @@
-package bigdata.spark.job2;
+package bigdata.spark.jobs;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.StreamSupport;
 
@@ -17,9 +16,6 @@ import scala.Tuple2;
 
 class TupleComparator implements Comparator<Tuple2<String, Integer>>, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 110104234L;
 
 	@Override
@@ -34,15 +30,25 @@ class TupleComparator implements Comparator<Tuple2<String, Integer>>, Serializab
 }
 
 public class Job2 implements Serializable {
+	
+	
+	
+	private static final long serialVersionUID = 176876875L;
+	private JavaSparkContext sc;
+
+	public void close() {
+		this.sc.close();
+	}
+
+
 	private JavaRDD<Record> loadData(String pathToFile) {
 		SparkConf conf = new SparkConf().setAppName("Wordcount");
-		JavaSparkContext sc = new JavaSparkContext(conf);
+		sc = new JavaSparkContext(conf);
 		JavaRDD<String> rows = sc.textFile(pathToFile);
 
 		RecordParser parser = new RecordParser();
 		JavaRDD<Record> records = rows.map(parser::parseRecord).filter(r -> r != null && r.getYear() >= Constants.MIN_DATE_JOB2);
 
-		//sc.close(); // TODO : ???
 
 		return records;
 
@@ -62,40 +68,11 @@ public class Job2 implements Serializable {
 		prodYear2avg = prodYear2avg.sortByKey(new TupleComparator());
 
 
-		prodYear2avg.saveAsTextFile("tu_zia.txt");
+		prodYear2avg.saveAsTextFile("job2result");
 
 	}
 
 
-	//	private static String pathToFile;
-	//
-	//	public WordCount(String file){
-	//		this.pathToFile = file;
-	//	}
-	//	/**
-	//	 * Load the data from the text file and return an RDD of words
-	//	 */
-	//	public JavaRDD<String> loadData() {
-	//		
-	//		JavaRDD<String> words = sc.textFile(pathToFile).flatMap(line -> Arrays.asList(line.split(" ")));
-	//		return words;
-	//	}
-	//
-	//	public JavaPairRDD<String, Integer> wordcount() {
-	//		JavaRDD<String> words = loadData();
-	//		// Step 1: mapper step
-	//		JavaPairRDD<String, Integer> couples =
-	//				words.mapToPair(word -> new Tuple2<String, Integer>(word, 1));
-	//		// Step 2: reducer step
-	//		JavaPairRDD<String, Integer> result = couples.reduceByKey((a, b) -> a + b);
-	//		return result;
-	//	}
-	//	public JavaPairRDD<String, Integer> filterOnWordcount(int x) {
-	//		JavaPairRDD<String, Integer> wordcounts = wordcount();
-	//		JavaPairRDD<String, Integer> filtered =
-	//				wordcounts.filter(couple -> couple._2() > x);
-	//		return filtered;
-	//	}
 
 	public static void main(String[] args) {
 		if (args.length < 1) {
@@ -106,9 +83,9 @@ public class Job2 implements Serializable {
 		Job2 job2 = new Job2();
 
 		job2.job2Task(args[0]);
+		
+		job2.close();
 
-		//WordCount wc = new WordCount(args[0]);
-		//System.out.println("wordcount: "+wc.wordcount().toString());
 	}
 }
 
