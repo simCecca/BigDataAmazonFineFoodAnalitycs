@@ -64,11 +64,14 @@ public class Job2 implements Serializable {
 
 			return new Tuple2<Tuple2<String, Integer>, Double>(tuple._1, avg);
 		});
+		
+		JavaPairRDD<String, Iterable<Tuple2<Integer, Double>>> result = prodYear2avg
+				.mapToPair(tuple -> new Tuple2<String, Tuple2<Integer, Double>>(tuple._1._1,new Tuple2<Integer, Double>(tuple._1._2, tuple._2)))
+				.groupByKey()
+				.sortByKey();
+		
 
-		prodYear2avg = prodYear2avg.sortByKey(new TupleComparator());
-
-
-		prodYear2avg.saveAsTextFile("job2result");
+		result.coalesce(1).saveAsTextFile("job2result");
 
 	}
 
