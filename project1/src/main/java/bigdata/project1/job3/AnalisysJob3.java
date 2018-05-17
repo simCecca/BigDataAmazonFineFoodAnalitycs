@@ -26,6 +26,8 @@ public class AnalisysJob3 {
 	{
 		Job job = new Job(new Configuration(), "AmazonJob3");
 
+		long startTime = System.currentTimeMillis();
+		
 		job.setJarByClass(AnalisysJob3.class);
 		job.setMapperClass(MapperPart1Job3.class);
 		job.setReducerClass(ReducerPart1Job3.class);
@@ -39,6 +41,7 @@ public class AnalisysJob3 {
 
 		job.waitForCompletion(true);
 
+		long endFirst = System.currentTimeMillis();
 
 		Job job2 = new Job(new Configuration(), "AmazonJob3.2");
 		job2.setJarByClass(AnalisysJob3.class);
@@ -53,6 +56,14 @@ public class AnalisysJob3 {
 
 		job2.waitForCompletion(true);
 
+		long endSecond = System.currentTimeMillis();
+		
+		long timeJob1 = endFirst - startTime;
+		long timeJob2 = endSecond - endFirst;
+		
+		System.out.println("\n\n\n\n\n\n\n");
+		System.out.println("TEMPO PRIMO JOB:    " + timeJob1/1000.0 + "              TEMPO SECONDO JOB:    " + timeJob2/1000.0);
+	
 	}
 
 }

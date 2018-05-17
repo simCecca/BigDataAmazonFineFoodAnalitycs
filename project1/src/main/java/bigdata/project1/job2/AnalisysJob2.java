@@ -15,7 +15,9 @@ public class AnalisysJob2 {
 	public static void main( String[] args ) throws IOException, ClassNotFoundException, InterruptedException
 	{
 		Job job = new Job(new Configuration(), "AmazonJob2");
-
+		
+		long startTime = System.currentTimeMillis();
+		
 		job.setJarByClass(AnalisysJob2.class);
 		job.setMapperClass(MapperJob2.class);
 		job.setCombinerClass(CombinerJob2.class);
@@ -32,7 +34,8 @@ public class AnalisysJob2 {
 
 		job.waitForCompletion(true);
 
-
+		long endFirst = System.currentTimeMillis();
+		
 		Job job2 = new Job(new Configuration(), "AmazonJob2.2");
 		job2.setJarByClass(AnalisysJob2.class);
 		job2.setMapperClass(MapperPart2.class);
@@ -48,6 +51,13 @@ public class AnalisysJob2 {
 		job2.setOutputValueClass(Text.class);
 
 		job2.waitForCompletion(true);
-
+		
+		long endSecond = System.currentTimeMillis();
+		
+		long timeJob1 = endFirst - startTime;
+		long timeJob2 = endSecond - endFirst;
+		
+		System.out.println("\n\n\n\n\n\n\n");
+		System.out.println("TEMPO PRIMO JOB:    " + timeJob1/1000.0 + "              TEMPO SECONDO JOB:    " + timeJob2/1000.0);
 	}
 }
