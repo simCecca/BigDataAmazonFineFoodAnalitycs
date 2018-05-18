@@ -82,8 +82,13 @@ public class Job1 implements Serializable {
 		}
 
 		Job1 job1 = new Job1();
-
+		
+		long start = System.currentTimeMillis();
 		job1.job1Task(args[0]);
+		long end = System.currentTimeMillis();
+		
+		System.out.println("\n\n\n\n\n\n\n");
+		System.out.println("TEMPO PRIMO JOB:    " + (end-start)/1000.0) ;
 
 	}
 }

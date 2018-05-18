@@ -20,6 +20,8 @@ public class AmazonAnalisysJobOne
     {
     	 Job job = new Job(new Configuration(), "Amazon");
          
+    	 long start = System.currentTimeMillis();
+    	 
          job.setJarByClass(AmazonAnalisysJobOne.class);
          job.setMapperClass(MapperJob1.class);
          job.setReducerClass(ReducerJob1.class);
@@ -31,5 +33,14 @@ public class AmazonAnalisysJobOne
  		 job.setOutputValueClass(Text.class);
          
  		 job.waitForCompletion(true);
+ 		 
+ 		 long end = System.currentTimeMillis();
+		
+ 		 long time = end - start;
+ 		 
+		
+ 		 System.out.println("\n\n\n\n\n\n\n");
+ 		 System.out.println("TEMPO:    " + time/1000.0);
+ 		System.out.println("\n\n\n\n\n\n\n");
     }
 }

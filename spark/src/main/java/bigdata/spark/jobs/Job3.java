@@ -77,7 +77,13 @@ public class Job3 implements Serializable {
 
 		Job3 job3 = new Job3();
 
+		long start = System.currentTimeMillis();
 		job3.job3Task(args[0]);
+		long end = System.currentTimeMillis();
+		
+		System.out.println("\n\n\n\n\n\n\n");
+		System.out.println("TEMPO PRIMO JOB:    " + (end-start)/1000.0) ;
+		System.out.println("\n\n\n\n\n\n\n");
 		
 		job3.close();
 
