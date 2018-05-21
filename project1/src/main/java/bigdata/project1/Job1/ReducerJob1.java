@@ -11,13 +11,14 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class ReducerJob1 extends Reducer<IntWritable, Text, IntWritable, Text> {
+public class ReducerJob1 extends Reducer<IntWritable, WordOccurrences, IntWritable, Text> {
 
-	public Map<String, Long> getSortedOccurrences(Iterable<Text> vals) {
+	public Map<String, Integer> getSortedOccurrences(Iterable<WordOccurrences> vals) {
 
-		Map<String, Long> occurrences = StreamSupport.stream(vals.spliterator(), false).collect(Collectors.groupingBy(Text::toString, Collectors.counting()));
+		Map<String, Integer> occurrences = StreamSupport.stream(vals.spliterator(), false).collect(Collectors.groupingBy(WordOccurrences::getWordString,
+						Collectors.summingInt(WordOccurrences::getOccurrencesInt)));
 		
-		NavigableMap<String, Long> sortedOccurrences = new TreeMap<>((a, b) -> {
+		NavigableMap<String, Integer> sortedOccurrences = new TreeMap<>((a, b) -> {
 			int res = (int)(occurrences.get(b) - occurrences.get(a));
 			if (res == 0) res = a.compareTo(b);
 			return res;
@@ -37,10 +38,10 @@ public class ReducerJob1 extends Reducer<IntWritable, Text, IntWritable, Text> {
 
 
 	@Override
-	protected void reduce(IntWritable key, Iterable<Text> vals,
-			Reducer<IntWritable, Text, IntWritable, Text>.Context ctx) throws IOException, InterruptedException {
+	protected void reduce(IntWritable key, Iterable<WordOccurrences> vals,
+			Reducer<IntWritable, WordOccurrences, IntWritable, Text>.Context ctx) throws IOException, InterruptedException {
 
-		Map<String, Long> sortedOccurrences = getSortedOccurrences(vals);
+		Map<String, Integer> sortedOccurrences = getSortedOccurrences(vals);
 
 		StringBuilder builder = new StringBuilder();
 

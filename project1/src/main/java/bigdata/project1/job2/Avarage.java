@@ -14,7 +14,6 @@ public class Avarage implements WritableComparable<Avarage> {
 	private DoubleWritable value;
 	private IntWritable count;
 	
-	public Avarage() {}
 	
 	public Avarage(double value) {
 		this.value = new DoubleWritable(value);

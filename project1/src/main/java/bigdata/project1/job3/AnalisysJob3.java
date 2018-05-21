@@ -4,21 +4,12 @@ import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import bigdata.project1.job2.AnalisysJob2;
-import bigdata.project1.job2.Avarage;
-import bigdata.project1.job2.CombinerJob2;
-import bigdata.project1.job2.MapperJob2;
-import bigdata.project1.job2.MapperPart2;
-import bigdata.project1.job2.ReducerJob2;
-import bigdata.project1.job2.ReducerPart2;
-import bigdata.project1.job2.YearProductWritable;
 
 public class AnalisysJob3 {
 	

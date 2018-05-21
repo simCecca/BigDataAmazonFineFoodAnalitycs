@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.hadoop.io.Text;
 import org.junit.Before;
 import org.junit.Test;
 
 import bigdata.project1.Job1.ReducerJob1;
+import bigdata.project1.Job1.WordOccurrences;
 
 public class ReducerJob1Test {
 	
-	public static Iterable<Text> getIterable(String...strings) {
+	public static Iterable<WordOccurrences> getIterable(String...strings) {
 		List<String> strs = Arrays.asList(strings);
-		return strs.stream().map(s -> new Text(s)).collect(Collectors.toList());
+		return strs.stream().map(s -> new WordOccurrences(s, 1)).collect(Collectors.toList());
 	}
 	
 	private ReducerJob1 red;
@@ -29,15 +29,15 @@ public class ReducerJob1Test {
 
 	@Test
 	public void testGetSortedOccurrencesUnaParola() {
-		Map<String, Long> occ = this.red.getSortedOccurrences(getIterable("a", "a", "a"));
+		Map<String, Integer> occ = this.red.getSortedOccurrences(getIterable("a", "a", "a"));
 		
-		assertEquals(3L, occ.get("a").longValue());
+		assertEquals(3, occ.get("a").longValue());
 	}
 	
 	
 	@Test
 	public void testGetSortedOccurrencesDueParola() {
-		Map<String, Long> occ = this.red.getSortedOccurrences(getIterable("a", "a", "a", "b", "b"));
+		Map<String, Integer> occ = this.red.getSortedOccurrences(getIterable("a", "a", "a", "b", "b"));
 		
 		assertEquals(3L, occ.get("a").longValue());
 		assertEquals(2L, occ.get("b").longValue());
@@ -46,7 +46,7 @@ public class ReducerJob1Test {
 	
 	@Test
 	public void testGetSortedOccurrencesTreParola() {
-		Map<String, Long> occ = this.red.getSortedOccurrences(getIterable("a", "a", "a", "b", "b", "c"));
+		Map<String, Integer> occ = this.red.getSortedOccurrences(getIterable("a", "a", "a", "b", "b", "c"));
 		
 		assertEquals(3L, occ.get("a").longValue());
 		assertEquals(2L, occ.get("b").longValue());
@@ -55,9 +55,9 @@ public class ReducerJob1Test {
 	
 	@Test
 	public void testGetSortedOccurrencesUndiciParole() {
-		Iterable<Text> vals = getIterable("a", "a", "b", "b", "c", "c", "d", "d", "e", "e", "f", "f",
+		Iterable<WordOccurrences> vals = getIterable("a", "a", "b", "b", "c", "c", "d", "d", "e", "e", "f", "f",
 				"g", "g", "h", "h", "i", "i", "l", "l", "n");
-		Map<String, Long> occ = this.red.getSortedOccurrences(vals);
+		Map<String, Integer> occ = this.red.getSortedOccurrences(vals);
 		
 		assertEquals(10, occ.size());
 		assertNull(occ.get("n"));

@@ -14,12 +14,12 @@ import com.opencsv.CSVParser;
 
 
 
-public class MapperJob1 extends Mapper<LongWritable, Text, IntWritable, Text> {
+public class MapperJob1 extends Mapper<LongWritable, Text, IntWritable, WordOccurrences> {
 
 	private static final String SEPARATORS = "[_|$#<>\\^=\\[\\]\\*/\\\\,;,.\\-:()?!\"']";
 
 	@Override
-	protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, IntWritable, Text>.Context context)
+	protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, IntWritable, WordOccurrences>.Context context)
 			throws IOException, InterruptedException {
 
 		try {
@@ -46,7 +46,7 @@ public class MapperJob1 extends Mapper<LongWritable, Text, IntWritable, Text> {
 			}
 
 			for(String current : splitReview)
-				context.write(new IntWritable(year), new Text(current.trim()));
+				context.write(new IntWritable(year), new WordOccurrences(current, 1));
 
 		} catch (Exception e) {
 			System.err.println("Invalid Date / Line" + e.getMessage());
